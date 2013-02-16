@@ -1,0 +1,17 @@
+*~
+*.pyc
+*.pyo
+*.orig
+*.sw?
+.DS_Store
+._*
+*.egg
+*.egg-info
+*.egg-tmp
+virtual
+build
+dist
+*.sublime-project
+*.sublime-workspace
+
+RELEASE-VERSION
