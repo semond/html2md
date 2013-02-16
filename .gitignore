@@ -14,4 +14,6 @@ dist
 *.sublime-project
 *.sublime-workspace
 
+test*
+
 RELEASE-VERSION

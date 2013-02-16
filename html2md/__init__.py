@@ -19,12 +19,18 @@ class UrlToMarkdown(object):
 
     def __init__(self, mobilizer='original'):
         if mobilizer:
-            if not getattr(mobilizers, mobilizer.capitalize() + 'Mobilizer'):
+            if not getattr(mobilizers, mobilizer.capitalize() + 'Mobilizer', None):
                 raise Exception("Invalid mobilizer: {}".format(mobilizer))
             self.default_mobilizer = mobilizer
         self.log = Logger(self.__class__.__name__)
 
-    def convert(self, url, mobilizer=None):
+    def convert(self, url, mobilizer=None, simple_result=True):
+        """Fetch a page from URL, mobilize it, then convert it to Markdown
+
+        url: ...
+        mobilizer: 'original', 'instapaper',
+        simple_result: True returns markdown text, else returns a dict
+        """
         if not mobilizer:
             mobilizer = self.default_mobilizer
         try:
@@ -34,7 +40,8 @@ class UrlToMarkdown(object):
         mob = mob_object()
 
         self.log.debug("Obtaining {url} via {mobilizer}".format(url=url, mobilizer=mobilizer))
-        html = mob.fetch(url)
+        mobilized = mob.fetch(url)
+        self.log.info("Title is {0[title]!r}".format(mobilized))
 
         self.log.debug("Converting {url} to Markdown".format(url=url))
         h2t = HTML2Text()
@@ -42,29 +49,7 @@ class UrlToMarkdown(object):
         h2t.body_width = 0
 
         self.log.info("Converted to Markdown")
-        return h2t.handle(html)
-
-
-
-def urltomarkdown(url, mobilizer='original', enc='utf-8', output='-'):
-    """Convert URL to markdown."""
-
-    # Supported mobilizers:
-    #     original        (converts <BODY>)
-    #     instapaper
-
-    # Default encoding is utf-8
-    # Default output is '-' (stdout)
-    # """
-    log = Logger('html2md')
-
-    u2m = UrlToMarkdown(mobilizer=mobilizer)
-    mdown = u2m.convert(url)
-    if output == '-':
-        outfile = sys.stdout
-    else:
-        outfile = open(output, 'wb')
-    outfile.write(mdown.encode(enc))
-    if output != '-':
-        outfile.close()
-        log.info("Saved {!r}", output)
+        mobilized['markdown'] =  h2t.handle(mobilized['body'].html())
+        if simple_result:
+            return mobilized['markdown']
+        return mobilized

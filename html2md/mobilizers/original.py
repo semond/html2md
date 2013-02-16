@@ -25,4 +25,4 @@ class OriginalMobilizer(Mobilizer):
             raise Exception("GET {url!r} returned {0.status_code}".format(r, url=url))
 
         d = pq(r.content)
-        return d('body').html()
+        return dict(url=url, body=d('body'), title=d('title').text())

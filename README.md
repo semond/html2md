@@ -33,8 +33,54 @@ Example:
 
 ## Python
 
-    from html2md import urltomarkdown
-    print urltomarkdown('http://google.ca', mobilizer='instapaper')
+    from html2md import UrlToMarkdown
+    u2md = UrlToMarkdown('instapaper')
+    print u2md.convert('http://google.ca')
+
+
+## Log a mobilized version of an URL to Day One
+
+To import a URL into Day One, you could make a script like this, named `myscript.py`:
+
+    #!/usr/bin/env python
+    # -*- coding: utf-8 -*-
+
+    import subprocess
+    from html2md import UrlToMarkdown
+    from argh import *
+
+
+    def main(url):
+        """Import URL into Day One Mac Software"""
+        u2md = UrlToMarkdown('instapaper')
+        res = u2md.convert(url, simple_result=False)
+
+        md = u"""
+    {res[title]}
+
+    [Source]({url})
+
+    -----
+
+    {res[markdown]}
+    """.strip().format(url=url, res=res)
+
+        proc = subprocess.Popen(['/usr/local/bin/dayone', 'new'], stdin=subprocess.PIPE)
+        proc.communicate(md.encode('utf-8'))
+
+    dispatch_command(main)
+
+Then, make it executable with `chmod a+x myscript.py`, and then test it…
+
+    myscript.py http://google.ca/
+
+That script can then be used in Alfred, with a shortcut and a notification in the Notification Center once done.
+
+e.g. create a new script in the “Extensions” section, give a keyword like "uday", check "Silent", in advanced check “Output to notification center”, and enter the full path to the command in the “Command” text area:
+
+    /Users/<myusername>/bin/myscript.py {query}
+
+And set the parameter to “Required Parameter”. Save, then use :)
 
 
 ## External stuff

@@ -30,4 +30,4 @@ class InstapaperMobilizer(Mobilizer):
             raise Exception("GET {url!r} returned {0.status_code}".format(r, url=url))
 
         d = pq(r.content)
-        return d('#story').html()
+        return dict(url=url, body=d('#story'), title=d('title').text())
