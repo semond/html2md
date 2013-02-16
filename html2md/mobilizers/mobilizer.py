@@ -2,7 +2,7 @@
 """
 
 :copyright: © 2012, Serge Emond
-:license: not specified
+:license: Apache License 2.0
 
 """
 

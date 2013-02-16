@@ -2,18 +2,13 @@
 """
 
 :copyright: © 2012, Serge Emond
-:license: not specified
+:license: Apache License 2.0
 
 """
 
 from __future__ import absolute_import
 
-
 from logbook.compat import redirect_logging
-from logbook import StderrHandler, NullHandler, catch_exceptions
-
-__all__ = ['quick_logbook']
-
 
 log_levels = {
     # NOTSET
@@ -58,39 +53,3 @@ def color_formatter(record, handler):
         '%(lvl_color)s%(message)s\033[0m' % r
 
     return output
-
-
-class quick_logbook(object):
-    """Quickly setup logbook logging output on stdout
-
-    usage:
-    @quick_logbook(level=2, coloring=True)
-    def main():
-        pass
-
-    redirect True means to redirect python's logging to logbook. Setting this and manually handling elsewhere will cause duplicated logging
-    """
-    def __init__(self, level=2, coloring=True, redirect=False):
-        self.level = level
-        self.coloring = True
-        self.redirect = redirect
-
-    def __call__(self, f):
-        def wrapped_f(*args, **kwargs):
-            if self.redirect:
-                redirect_logging()
-            handler = StderrHandler()
-            if self.coloring:
-                handler.formatter = color_formatter
-            handler.level = self.level
-            nullhandler = NullHandler()
-
-            with nullhandler.applicationbound():
-                with handler.applicationbound():
-                    with catch_exceptions(''):
-                        try:
-                            f(*args, **kwargs)
-                        except SystemExit as e:
-                            # catch_exceptions is a bit too catchy
-                            pass
-        return wrapped_f

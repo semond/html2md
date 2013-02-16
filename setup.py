@@ -2,7 +2,7 @@
 """
 
 :copyright: © 2012, Serge Emond
-:license: not specified
+:license: Apache License 2.0
 
 """
 
@@ -16,6 +16,17 @@ setup(
     version=get_git_version(),
     author=u'Serge Émond',
     author_email='greyl@greyworld.net',
+    url='https://bitbucket.org/greyw/html2md',
+    classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: Apache Software License',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Topic :: Utilities',
+    ],
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,

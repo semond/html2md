@@ -2,15 +2,16 @@
 """
 
 :copyright: © 2012, Serge Emond
-:license: not specified
+:license: Apache License 2.0
 
 """
 
 from __future__ import absolute_import
 
-from . import mobilizers
-from html2text import HTML2Text
+import sys
 from logbook import Logger
+from html2text import HTML2Text
+from . import mobilizers
 
 
 class UrlToMarkdown(object):
@@ -42,3 +43,28 @@ class UrlToMarkdown(object):
 
         self.log.info("Converted to Markdown")
         return h2t.handle(html)
+
+
+
+def urltomarkdown(url, mobilizer='original', enc='utf-8', output='-'):
+    """Convert URL to markdown."""
+
+    # Supported mobilizers:
+    #     original        (converts <BODY>)
+    #     instapaper
+
+    # Default encoding is utf-8
+    # Default output is '-' (stdout)
+    # """
+    log = Logger('html2md')
+
+    u2m = UrlToMarkdown(mobilizer=mobilizer)
+    mdown = u2m.convert(url)
+    if output == '-':
+        outfile = sys.stdout
+    else:
+        outfile = open(output, 'wb')
+    outfile.write(mdown.encode(enc))
+    if output != '-':
+        outfile.close()
+        log.info("Saved {!r}", output)
