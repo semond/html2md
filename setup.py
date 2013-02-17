@@ -17,6 +17,7 @@ setup(
     author=u'Serge Émond',
     author_email='greyl@greyworld.net',
     url='https://bitbucket.org/greyw/html2md',
+    description="Mobilizes web page content, then convert it to markdown",
     classifiers=[
         'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
