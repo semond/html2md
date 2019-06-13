@@ -1,25 +1,25 @@
-# -*- coding: utf-8 -*-
 """
+Init.
 
-:copyright: © 2012, Serge Emond
+:copyright: © 2019, Serge Emond
 :license: Apache License 2.0
 
 """
 
-from __future__ import absolute_import
-
 import sys
-from logbook import Logger
+
 from html2text import HTML2Text
+from logbook import Logger
+
 from . import mobilizers
 
 
 class UrlToMarkdown(object):
-    default_mobilizer = 'original'
+    default_mobilizer = "original"
 
-    def __init__(self, mobilizer='original'):
+    def __init__(self, mobilizer="original"):
         if mobilizer:
-            if not getattr(mobilizers, mobilizer.capitalize() + 'Mobilizer', None):
+            if not getattr(mobilizers, mobilizer.capitalize() + "Mobilizer", None):
                 raise Exception("Invalid mobilizer: {}".format(mobilizer))
             self.default_mobilizer = mobilizer
         self.log = Logger(self.__class__.__name__)
@@ -34,12 +34,14 @@ class UrlToMarkdown(object):
         if not mobilizer:
             mobilizer = self.default_mobilizer
         try:
-            mob_object = getattr(mobilizers, mobilizer.capitalize() + 'Mobilizer')
+            mob_object = getattr(mobilizers, mobilizer.capitalize() + "Mobilizer")
         except AttributeError:
             raise Exception("Invalid mobilizer: {}".format(mobilizer))
         mob = mob_object()
 
-        self.log.debug("Obtaining {url} via {mobilizer}".format(url=url, mobilizer=mobilizer))
+        self.log.debug(
+            "Obtaining {url} via {mobilizer}".format(url=url, mobilizer=mobilizer)
+        )
         mobilized = mob.fetch(url)
         self.log.info("Title is {0[title]!r}".format(mobilized))
 
@@ -49,7 +51,7 @@ class UrlToMarkdown(object):
         h2t.body_width = 0
 
         self.log.info("Converted to Markdown")
-        mobilized['markdown'] =  h2t.handle(mobilized['body'].html())
+        mobilized["markdown"] = h2t.handle(mobilized["body"].html())
         if simple_result:
-            return mobilized['markdown']
+            return mobilized["markdown"]
         return mobilized

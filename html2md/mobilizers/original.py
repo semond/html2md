@@ -1,12 +1,9 @@
-# -*- coding: utf-8 -*-
 """
 
-:copyright: © 2012, Serge Emond
+:copyright: © 2019, Serge Emond
 :license: Apache License 2.0
 
 """
-
-from __future__ import absolute_import
 
 import requests
 from pyquery import PyQuery as pq
@@ -25,4 +22,4 @@ class OriginalMobilizer(Mobilizer):
             raise Exception("GET {url!r} returned {0.status_code}".format(r, url=url))
 
         d = pq(r.content)
-        return dict(url=url, body=d('body'), title=d('title').text())
+        return dict(url=url, body=d("body"), title=d("title").text())
