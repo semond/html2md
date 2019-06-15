@@ -2,6 +2,9 @@
 
 `html2md` is a Python script that downloads HTML from a URL, optionnally passing it through Instapaper’s mobilizer, and then converts it to Markdown.
 
+**This project is now deprecated**. `html2text` supports downloading from HTTP by itself nowadays, and instapaper have closed their API. As such, there's no point in this small wrapper, which I haven't used for years anyway.
+
+
 ## Command line
 
 Command line usage:
